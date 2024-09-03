@@ -1,0 +1,24 @@
+{
+  "name": "business-ru-sync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run compile && node --env-file=.env ./dist/index.js | pino-pretty --colorize --translateTime SYS:standard",
+    "start:dev": "nodemon ./dist/index.js",
+    "compile": "tsc -p tsconfig.json",
+    "ts": "ts-node"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.4.0",
+    "@typescript-eslint/parser": "^8.4.0",
+    "eslint": "^9.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "type": "module"
+}
