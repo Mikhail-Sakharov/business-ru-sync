@@ -1,4 +1,7 @@
+import {Source} from './source.enum.js';
+
 export type Query = {
-  source: string;
+  source: Source;
+  queryString: string;
   appPsw: string;
 };
