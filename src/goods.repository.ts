@@ -22,6 +22,8 @@ export class GoodsRepository {
   public destroyConnection = async () => {
     this.connection?.end();
     this.connection = null;
+
+    this.loggerService.info('[GoodsRepository]: Connection closed')
   };
 
   public add = async (good: Good) => {
