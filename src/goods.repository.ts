@@ -1,55 +1,36 @@
-import mysql from 'mysql2/promise';
-
 import {DatabaseService} from './database.service.js';
 import {LoggerService} from './logger.service.js';
 
-import {Good} from './types/good.type.js';
+import {Good} from './good.model.js';
+
+import {GoodType} from './types/good.type.js';
 
 export class GoodsRepository {
-  private connection: mysql.Connection | null = null;
 
   constructor(
     private readonly databaseService = new DatabaseService(),
     private readonly loggerService = new LoggerService()
   ) {}
 
-  public createConnection = async () => {
-    const connection = await this.databaseService.createConnection();
-    this.connection = connection;
-    return connection;
+  public find = async (goodId: number) => {
+    const good = await Good.findOne({ where: { bru_id: goodId } });
+    return good;
   };
 
-  public destroyConnection = async () => {
-    this.connection?.end();
-    this.connection = null;
+  public add = async (good: GoodType) => {
+    const goodEntry = await Good.create({
+      name: good.name,
+      full_name: good.full_name,
+      description: good.description,
+      cost: good.cost,
+      archive: good.archive,
+      bru_id: good.id,
+      bru_group_id: good.group_id,
+      bru_measure_id: good.measure_id,
+      bru_partner_id: good.partner_id,
+      bru_responsible_employee_id: good.responsible_employee_id
+    });
 
-    this.loggerService.info('[GoodsRepository]: Connection closed');
-  };
-
-  public add = async (good: Good) => {
-    const goodName = good.name.replace(/\"/g, '\'');
-    const goodFullName = good.full_name.replace(/\"/g, '\'');
-
-    if (this.connection) {
-      const query = await this.connection.query(
-        `INSERT INTO goods VALUES (NULL, "${goodName}", "${goodFullName}", ${good.id}, ${good.group_id}, ${good.measure_id})`
-      );
-
-      return query;
-    }
-
-    return null;
-  };
-
-  public find = async (goodId: string) => {
-    if (this.connection) {
-      const [results] = await this.connection.query(
-        `SELECT * FROM goods WHERE bru_id = ${goodId}`
-      );
-
-      return results;
-    } else {
-      return null;
-    }
+    return goodEntry;
   };
 }

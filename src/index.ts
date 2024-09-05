@@ -4,7 +4,7 @@ import {LoggerService} from './logger.service.js';
 import {BusinessRUService} from './business-ru.service.js';
 
 import {Source} from './types/source.enum.js';
-import {Good} from './types/good.type.js';
+import {GoodType} from './types/good.type.js';
 import {GoodsRepository} from './goods.repository.js';
 
 const host = process.env.HOST;
@@ -14,25 +14,23 @@ const logger = new LoggerService();
 const businessRUService = new BusinessRUService();
 const goodsRepository = new GoodsRepository();
 
-const server = http.createServer(async (req, res) => {
+const server = http.createServer(async (_req, res) => {
   try {
     const goodsCount = await businessRUService.getItemsCount(Source.Goods);
     const pagesCount = goodsCount ? Math.ceil(goodsCount / 250)+1 : 0;
 
     if (pagesCount) {
-      await goodsRepository.createConnection();
 
       for(let page = 1; page <= pagesCount; page++) {
-        const goods = await businessRUService.getItems<Good>(Source.Goods, page);
+        const goods = await businessRUService.getItems<GoodType>(Source.Goods, page);
 
         if (goods && goods.length) {
           for(let i = 0; i < goods.length; i++) {
             const goodFromDB = await goodsRepository.find(goods[i].id);
-            const goodExists = goodFromDB && (goodFromDB as any).length;
 
-            if (!goodExists) {
-              logger.info(JSON.stringify(goods[i]));
-              await goodsRepository.add(goods[i]);
+            if (goodFromDB === null) {
+              const createdGood = await goodsRepository.add(goods[i]);
+              logger.info(JSON.stringify(createdGood));
             } else {
               logger.warn('[App]: Insert aborted! Such item already exists in DB!');
             }
@@ -40,7 +38,7 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      goodsRepository.destroyConnection();
+      logger.info('[App]: Inserting data complete');
 
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
