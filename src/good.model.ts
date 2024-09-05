@@ -1,6 +1,6 @@
 import {Model, DataTypes} from 'sequelize';
 
-import {sequelize} from './config/database.config';
+import {sequelize} from './config/database.config.js';
 
 export class Good extends Model {}
 
