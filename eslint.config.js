@@ -1,3 +1,5 @@
+import tseslint from 'typescript-eslint';
+
 export default [
   {
     files: ["src/**/*.ts"],
@@ -9,5 +11,8 @@ export default [
         "comma-dangle": "error",
         "no-trailing-spaces": "error"
     }
-  }
+  },
+  ...tseslint.config(
+    ...tseslint.configs.recommended
+  )
 ];
