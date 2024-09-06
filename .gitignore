@@ -4,3 +4,4 @@ build
 .env
 Readme.md
 todo.md
+queries.http

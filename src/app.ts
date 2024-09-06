@@ -27,7 +27,22 @@ export class App {
 
   private startServer = () => {
     const server = http.createServer(async (req, res) => {
-      this.router.handleRoute(req, res);
+      const allowedOrigin = process.env.ALLOWED_ORIGIN;
+      const allowedHeaders = process.env.ALLOWED_HEADERS;
+      const allowedMethods = process.env.ALLOWED_METHODS;
+      const origin = req.headers.origin;
+
+      if (!!allowedOrigin && !!allowedHeaders && !!allowedMethods && origin !== allowedOrigin) {
+        this.loggerService.warn(`[App.CORS]: origin is ${origin}`);
+
+        res.statusCode = 403;
+        res.setHeader('Access-Control-Allow-Headers', allowedHeaders);
+        res.setHeader('Access-Control-Allow-Methods', allowedMethods);
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+        res.end();
+      } else {
+        this.router.handleRoute(req, res);
+      }
     });
 
     server.listen(this.port, this.host, () => {
