@@ -21,6 +21,7 @@ export class GoodsController {
       const pagesCount = goodsCount ? Math.ceil(goodsCount / 250)+1 : 0;
 
       if (pagesCount) {
+        await this.goodsRepository.syncGoodTable();
 
         for(let page = 1; page <= pagesCount; page++) {
           const goods = await this.businessRUService.getItems<GoodType>(Source.Goods, page);

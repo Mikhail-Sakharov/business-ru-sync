@@ -12,8 +12,12 @@ export class GoodsRepository {
     private readonly loggerService = new LoggerService()
   ) {}
 
+  public syncGoodTable = async () => {
+    await Good.sync({alter: true});
+  };
+
   public find = async (goodId: number) => {
-    const good = await Good.findOne({ where: { bru_id: goodId } });
+    const good = await Good.findOne({where: {bru_id: goodId}});
     return good;
   };
 

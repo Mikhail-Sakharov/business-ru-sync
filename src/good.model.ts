@@ -20,7 +20,7 @@ Good.init(
       allowNull: false
     },
     description: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     cost: {
       type: DataTypes.FLOAT
@@ -31,7 +31,8 @@ Good.init(
     },
     bru_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     bru_group_id: {
       type: DataTypes.INTEGER,
@@ -51,7 +52,7 @@ Good.init(
   },
   {
     sequelize,
-    modelName: 'Good',
+    modelName: 'good',
     timestamps: false
   }
 );
