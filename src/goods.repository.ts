@@ -26,6 +26,7 @@ export class GoodsRepository {
       name: good.name,
       full_name: good.full_name,
       description: good.description,
+      part: good.part,
       cost: good.cost,
       archive: good.archive,
       bru_id: good.id,

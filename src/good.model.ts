@@ -22,6 +22,10 @@ Good.init(
     description: {
       type: DataTypes.TEXT
     },
+    part: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     cost: {
       type: DataTypes.FLOAT
     },

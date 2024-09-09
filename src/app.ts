@@ -32,13 +32,17 @@ export class App {
       const allowedMethods = process.env.ALLOWED_METHODS;
       const origin = req.headers.origin;
 
-      if (!!allowedOrigin && !!allowedHeaders && !!allowedMethods && origin !== allowedOrigin) {
+      if (origin !== allowedOrigin) {
         this.loggerService.warn(`[App.CORS]: origin is ${origin}`);
 
         res.statusCode = 403;
-        res.setHeader('Access-Control-Allow-Headers', allowedHeaders);
-        res.setHeader('Access-Control-Allow-Methods', allowedMethods);
-        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+
+        if (!!allowedOrigin && !!allowedHeaders && !!allowedMethods) {
+          res.setHeader('Access-Control-Allow-Headers', allowedHeaders);
+          res.setHeader('Access-Control-Allow-Methods', allowedMethods);
+          res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+        }
+
         res.end();
       } else {
         this.router.handleRoute(req, res);
