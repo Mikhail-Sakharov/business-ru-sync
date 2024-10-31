@@ -24,7 +24,7 @@ Good.init(
     },
     part: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     cost: {
       type: DataTypes.FLOAT
