@@ -29,8 +29,10 @@ export class GoodsController {
           if (goods && goods.length) {
             for(let i = 0; i < goods.length; i++) {
               const goodFromDB = await this.goodsRepository.find(goods[i].id);
+              const isNotServiceType = Number(goods[i].type) === 1; // В Бизнес.ру 1 - это Товар, 2 - Услуга
 
-              if (goodFromDB === null) {
+              // Если в БД пока что такого товара нет, то добавляем его
+              if (goodFromDB === null && isNotServiceType) {
                 const createdGood = await this.goodsRepository.add(goods[i]);
                 this.loggerService.info(JSON.stringify(createdGood));
               } else {

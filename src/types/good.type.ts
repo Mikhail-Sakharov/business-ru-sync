@@ -4,6 +4,7 @@ export type GoodType = {
   full_name: string;
   description: string;
   part: string;
+  type: number;
   cost: number;
   archive: boolean;
   group_id: number;
